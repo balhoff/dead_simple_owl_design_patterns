@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Dead simple owl design patterns by dosumis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Dead simple owl design patterns</h1>
+      <h2 class="project-tagline">A simple system for specifying OWL class design patterns for OBO-ish ontologies.</h2>
+      <a href="https://github.com/dosumis/dead_simple_owl_design_patterns" class="btn">View on GitHub</a>
+      <a href="https://github.com/dosumis/dead_simple_owl_design_patterns/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/dosumis/dead_simple_owl_design_patterns/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="dead-simple-owl-design-pattern-dos-dp-exchange-format" class="anchor" href="#dead-simple-owl-design-pattern-dos-dp-exchange-format" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dead simple owl design pattern (DOS-DP) exchange format</h1>
+
+<h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>The job of editing the GO and many other OBOish OWL ontologies increasingly involves specifying OWL design patterns.  We need a simple, light-weight standard for specifying these design patterns that can then be used for generating documentation, generating new terms and retrofitting old ones. The solution must be readable and editable by anyone with a basic knowledge of OWL and the ability to read manchester syntax.  It must also be easy to use programatically without the need for custom parsers - i.e. it should follow some existing data exchange standard.</p>
+
+<p>Human readability and editability requires that Manchester syntax be written using labels, but sustainability and consistency checking requires that the pattern record IDs. </p>
+
+<h2>
+<a id="approach" class="anchor" href="#approach" aria-hidden="true"><span class="octicon octicon-link"></span></a>Approach</h2>
+
+<ul>
+<li>
+<p>Patterns are specified in the subset of YAML that can be converted to JSON.</p>
+
+<ul>
+<li>JSON format is the ideal exchange format for programatic consumption: It is already javascript; Standard libraries are available to convert it into datastructures in many languages;Developers are typically experienced at consuming it. </li>
+<li>
+<em>But</em> YAML is much easier than JSON for humans to edit (it can be difficult for human editors to keep curly braces and quotes balanced and to add commas correctly in JSON). YAML also has the great advantage over JSON of allowing comments to be embedded. <a href="http://yamltojson.com/">Conversion between YAML and JSON is trivial</a>
+</li>
+</ul>
+</li>
+<li><p>All pattern contain dictionaries (hash lookups) that can be used to lookup up OWL shortform IDs from labels.  OWL ShortFormIDs are assumed to be sufficient for entity resolution during usage of the pattern.  Labels are assumed to be sufficient for entity resolution <em>within</em> a pattern.</p></li>
+<li><p>Variable interpolation into Manchester syntax and text is specified using sprintf format.  Variable names are stored in associated lists.</p></li>
+<li><p>Variables are specified in a dictionary with variable name as key and value as range specified as a Manchester syntax expresssion.</p></li>
+</ul>
+
+<h2>
+<a id="draft-spec" class="anchor" href="#draft-spec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Draft spec:</h2>
+
+<p>Manchester syntax expressions use names (labels).  These are always single quoted inside an expression that is double quoted. (Note single quotes in term names must be escaped).</p>
+
+<ul>
+<li>
+<strong>pattern_name</strong> (string): the name of the pattern. No spaces or special characters allowed.</li>
+<li>
+<strong>description</strong>(string): Text describing the pattern and its uses.  For use in documentation - not in OWL files.</li>
+<li>
+<strong>classes</strong> (associative array): hash lookup for OWL classes used in the pattern. key = name, value = ID</li>
+<li>
+<strong>relations</strong> (associative array): hash lookup for OWL object properties (relations) used in the pattern. key = name, value = ID</li>
+<li>
+<strong>vars</strong> (associative array): a hash lookup for vars in the pattern, key = var name, value = range expressed as manchester syntax.</li>
+<li>
+<strong>name</strong>  (associative array): 
+
+<ul>
+<li>
+<strong>text</strong> (string): sprintf label text</li>
+<li>
+<strong>vars</strong> (string): list of vars for interpolation of class names into sprintf of text.</li>
+</ul>
+</li>
+<li>
+<strong>def</strong> (associative array): 
+
+<ul>
+<li>
+<strong>text</strong> (string): sprintf definition text.<br>
+</li>
+<li>
+<strong>vars</strong> (array): List of vars for interpolation of class names into sprintf of text. </li>
+</ul>
+</li>
+<li>
+<strong>comment</strong>(string)</li>
+<li>
+<strong>EquivalentTo</strong> (associative array): 
+
+<ul>
+<li>
+<strong>text</strong> (string): Sprintf OWL Manchester syntax string.  All OWL entities must be quoted; %s not quoted).</li>
+<li>
+<strong>vars</strong> (array): List of vars for interpolation into sprintf owl MS text.</li>
+</ul>
+</li>
+</ul>
+
+<p>Draft yaml example - <a href="patterns/import_into_cell.yaml">import_into_cell</a></p>
+
+<p>Draft json example - <a href="patterns/import_into_cell.json">import_into_cell</a></p>
+
+<h2>
+<a id="validator-spec" class="anchor" href="#validator-spec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validator spec</h2>
+
+<p>(Basic JSON/YAML validation can be done using standard libraries)</p>
+
+<p>A validator will test:</p>
+
+<ul>
+<li>Integrity of the pattern
+
+<ul>
+<li>Are all keys valid?</li>
+<li>Are all values of the correct type?</li>
+<li>Are a minimal set of keys present?</li>
+<li>Are all owl entities in patterns in the dict?</li>
+<li>Do all sprintf statements have an matching list of the correct length?</li>
+</ul>
+</li>
+<li>Testing against a specified ontology:
+
+<ul>
+<li>Are the entities in the dictionary non-obsolete?</li>
+<li>Are the names up to date ?</li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="implementation" class="anchor" href="#implementation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementation</h2>
+
+<p>The aim of this project is to specify a simple design pattern system that can easily be consumed, whatever your code base.  This repository includes <a href="https://github.com/dosumis/dead_simple_owl_design_patterns/tree/master/src">code for validation, documentation and generation of pattern-based classes</a> written in Jython.</p>
+
+<p><a href="https://travis-ci.org/dosumis/dead_simple_owl_design_patterns"><img src="https://travis-ci.org/dosumis/dead_simple_owl_design_patterns.svg?branch=master" alt="Build Status"></a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/dosumis/dead_simple_owl_design_patterns">Dead simple owl design patterns</a> is maintained by <a href="https://github.com/dosumis">dosumis</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
