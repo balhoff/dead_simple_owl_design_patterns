@@ -20,17 +20,17 @@
 
     <section class="main-content">
       <h1>
-<a id="dead-simple-owl-design-pattern-dos-dp-exchange-format" class="anchor" href="#dead-simple-owl-design-pattern-dos-dp-exchange-format" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dead simple owl design pattern (DOS-DP) exchange format</h1>
+<a id="dead-simple-owl-design-pattern-dos-dp-exchange-format" class="anchor" href="#dead-simple-owl-design-pattern-dos-dp-exchange-format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dead simple owl design pattern (DOS-DP) exchange format</h1>
 
 <h2>
-<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation</h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivation</h2>
 
 <p>The job of editing the GO and many other OBOish OWL ontologies increasingly involves specifying OWL design patterns.  We need a simple, light-weight standard for specifying these design patterns that can then be used for generating documentation, generating new terms and retrofitting old ones. The solution must be readable and editable by anyone with a basic knowledge of OWL and the ability to read manchester syntax.  It must also be easy to use programatically without the need for custom parsers - i.e. it should follow some existing data exchange standard.</p>
 
 <p>Human readability and editability requires that Manchester syntax be written using labels, but sustainability and consistency checking requires that the pattern record IDs. </p>
 
 <h2>
-<a id="approach" class="anchor" href="#approach" aria-hidden="true"><span class="octicon octicon-link"></span></a>Approach</h2>
+<a id="approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h2>
 
 <ul>
 <li>
@@ -49,7 +49,11 @@
 </ul>
 
 <h2>
-<a id="draft-spec" class="anchor" href="#draft-spec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Draft spec:</h2>
+<a id="specification" class="anchor" href="#specification" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Specification:</h2>
+
+<p><a href="https://github.com/dosumis/dead_simple_owl_design_patterns/tree/master/spec">Full specification using JSON-schema</a>.</p>
+
+<p>The following is a quick guide to commonly used fields, with an emphasis on OBO-specific (derived) fields:</p>
 
 <p>Manchester syntax expressions use names (labels).  These are always single quoted inside an expression that is double quoted. (Note single quotes in term names must be escaped).</p>
 
@@ -104,7 +108,7 @@
 <p>Draft json example - <a href="patterns/import_into_cell.json">import_into_cell</a></p>
 
 <h2>
-<a id="validator-spec" class="anchor" href="#validator-spec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validator spec</h2>
+<a id="validator-spec" class="anchor" href="#validator-spec" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Validator spec</h2>
 
 <p>(Basic JSON/YAML validation can be done using standard libraries)</p>
 
@@ -131,11 +135,21 @@
 </ul>
 
 <h2>
-<a id="implementation" class="anchor" href="#implementation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementation</h2>
+<a id="implementation" class="anchor" href="#implementation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementation</h2>
 
 <p>The aim of this project is to specify a simple design pattern system that can easily be consumed, whatever your code base.  This repository includes <a href="https://github.com/dosumis/dead_simple_owl_design_patterns/tree/master/src">code for validation, documentation and generation of pattern-based classes</a> written in Jython.</p>
 
-<p><a href="https://travis-ci.org/dosumis/dead_simple_owl_design_patterns"><img src="https://travis-ci.org/dosumis/dead_simple_owl_design_patterns.svg?branch=master" alt="Build Status"></a></p>
+<h2>
+<a id="uses" class="anchor" href="#uses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Uses</h2>
+
+<ul>
+<li>
+<a href="http://obofoundry.org/ontology/envo.html">ENVO</a>: envo <a href="https://github.com/EnvironmentOntology/envo/tree/master/src/envo/patterns">patterns/</a>
+</li>
+<li>
+<a href="http://obofoundry.org/ontology/oba.html">OBA</a>: oba <a href="https://github.com/EnvironmentOntology/oba/tree/master/src/oba/patterns">patterns/</a>
+</li>
+</ul>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/dosumis/dead_simple_owl_design_patterns">Dead simple owl design patterns</a> is maintained by <a href="https://github.com/dosumis">dosumis</a>.</span>
